@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .invalid{
+            border : 1px solid red;
+            background-color: lightpink;
+        }
+    </style>
+    <script src="jquery-1.12.0.js"></script>
+    <script>
+        function greet(){
+            var firstName = $("#txtFirstName").val();
+            var $txtFirstName = $("#txtFirstName");
+
+            if ($(".invalid").length <= 0){
+                var lastName = $("#txtLastName").val();
+                var message = 'Hi ' + firstName + ' ' + lastName + ', Have a nice day!';
+                $("#divMessage").html(message).hide().fadeIn('slow');
+            }
+        }
+
+        $(function(){
+            $(":text[data-validate=notempty]").blur(validateName);
+            $("#btnGreet").click(greet);
+            $("#divMessage").click(function(){
+                $(this).fadeOut('slow');
+            });
+        });
+
+        function validateName(){
+            var $this = $(this);
+            var name = $this.val();
+            if (!name){
+                $this.addClass("invalid");
+            } else {
+                $this.removeClass("invalid");
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <input type="text" name="" id="txtFirstName" data-validate="notempty">
+    <input type="text" name="" id="txtLastName">
+    <input type="button" value="Greet" id="btnGreet">
+    <div id="divMessage">[Message goes here]</div>
+</body>
+</html>
