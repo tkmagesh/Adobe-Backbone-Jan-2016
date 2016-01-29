@@ -11,28 +11,68 @@
             font-weight: bold;
         }
     </style>
+    <script type="text/x-template" id="bugsListTemplate">
+
+            {{#each list}}
+                <li>{{name}}</li>
+            {{/each}}
+
+    </script>
     <script src="libs/jquery-1.12.0.js"></script>
     <script src="libs/handlebars-v4.0.5.js"></script>
     <script src="libs/underscore.js"></script>
     <script src="libs/backbone.js"></script>
     <script>
-        var Bug = Backbone.Model.extend({});
-        var BugsCollections = Backbone.Collection.extend({
+        var Bug = Backbone.Model.extend({
+            defaults : {
+                name : '',
+                isClosed : false
+            }
+        });
+        var BugsCollection = Backbone.Collection.extend({
             url : "http://localhost:3000/bugs",
             model : Bug
         });
+        var BugsCollectionView = Backbone.View.extend({
+            templateId : "#bugsListTemplate",
+            initialize : function(){
+                this.listenTo(this.collection, "all", this.render.bind(this));
+            },
+            events : {
+                "click #btnAdd" : "addNewBug"
+            },
+            addNewBug : function(){
+                var newBugName = this.$("#txtNewBug").val();
+                var newBug = {name : newBugName};
+                this.collection.create(newBug);
+            },
+            render : function(){
+                if (!this.templateFn)
+                    this.templateFn = Handlebars.compile($(this.templateId).html());
+                this.$("#olBugsList").html(this.templateFn({list : this.collection.toJSON()}));
+            }
+        });
+        $(function(){
+            window.bugsCollection = new BugsCollection();
+            var bugsCollectionView = new BugsCollectionView({
+               el : $("#bugsApp"),
+               collection : bugsCollection
+            });
+        })
     </script>
 </head>
 <body>
     <h1>Bug Tracker</h1>
     <hr>
-    <label for="">Bug :</label>
-    <input type="text" name="" id="txtNewBug">
-    <input type="button" value="Add Bug" id="btnAdd">
-    <input type="button" value="Remove Closed" id="btnRemoveClosed">
-    <ol>
-        <li>An open bug</li>
-        <li class="closed">A closed bug</li>
-    </ol>
+    <div id="bugsApp">
+        <label for="">Bug :</label>
+        <input type="text" name="" id="txtNewBug">
+        <input type="button" value="Add Bug" id="btnAdd">
+        <input type="button" value="Remove Closed" id="btnRemoveClosed">
+        <ol id="olBugsList">
+
+        </ol>
+    </div>
+
 </body>
 </html>

@@ -19,6 +19,16 @@
       "id": 4,
       "name": "dummy bug",
       "isClosed": false
+    },
+    {
+      "name": "one another dummy bug",
+      "isClosed": false,
+      "id": 5
+    },
+    {
+      "name": "one more dummy bug",
+      "isClosed": false,
+      "id": 6
     }
   ]
 }
