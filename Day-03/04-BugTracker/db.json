@@ -1,0 +1,24 @@
+{
+  "bugs": [
+    {
+      "id": 1,
+      "name": "User authentication failure",
+      "isClosed": false
+    },
+    {
+      "id": 2,
+      "name": "Data not saved",
+      "isClosed": true
+    },
+    {
+      "id": 3,
+      "name": "Server communication fault",
+      "isClosed": false
+    },
+    {
+      "id": 4,
+      "name": "dummy bug",
+      "isClosed": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+        .closed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+    </style>
+    <script src="libs/jquery-1.12.0.js"></script>
+    <script src="libs/handlebars-v4.0.5.js"></script>
+    <script src="libs/underscore.js"></script>
+    <script src="libs/backbone.js"></script>
+    <script>
+        var Bug = Backbone.Model.extend({});
+        var BugsCollections = Backbone.Collection.extend({
+            url : "http://localhost:3000/bugs",
+            model : Bug
+        });
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr>
+    <label for="">Bug :</label>
+    <input type="text" name="" id="txtNewBug">
+    <input type="button" value="Add Bug" id="btnAdd">
+    <input type="button" value="Remove Closed" id="btnRemoveClosed">
+    <ol>
+        <li>An open bug</li>
+        <li class="closed">A closed bug</li>
+    </ol>
+</body>
+</html>
