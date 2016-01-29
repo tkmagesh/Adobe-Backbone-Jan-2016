@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>React - Bug Tracker</title>
+    <script src="libs/react.js"></script>
+    <script src="libs/react-dom.js"></script>
+    <script src="libs/browser.js"></script>
+    <script src="libs/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <input type="button" value="Render Again" id="btnReRender">
+    <div id="content"></div>
+    <script type="text/babel">
+        var Greeter = React.createClass({
+            getInitialState : function(){
+                return { message : ''};
+            },
+            greet : function(){
+                var name = this.refs.txtName.value;
+                var message = 'Hi ' + name + ', Have a nice day!';
+
+                this.setState({message : message});
+            },
+            render : function(){
+                console.log('render triggered');
+                return (
+                    <div>
+                        <input type="text" ref="txtName"></input>
+                        <input type="button" value="Greet" onClick={this.greet}></input>
+                        <div>{this.state.message}</div>
+                    </div>
+                )
+            }
+        });
+        
+        document.getElementById("btnReRender").addEventListener("click", function(){
+            ReactDOM.render(<Greeter message="Welcome to React"></Greeter>, document.getElementById("content"));
+        });
+    </script>
+    <!--
+    <script src="app.js" type="text/babel">
+    
+    </script>
+    -->
+  </body>
+</html>
