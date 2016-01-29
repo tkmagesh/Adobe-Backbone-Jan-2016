@@ -14,17 +14,14 @@
             cursor: pointer;
         }
     </style>
-    <script type="text/x-template" id="bugsListTemplate">
-
-            {{#each list}}
-                <li>
+    <script type="text/x-template" id="bugTemplate">
                     {{#if isClosed}}
                         <span class="closed">{{name}}</span>
                     {{else}}
                         <span>{{name}}</span>
                     {{/if}}
-                </li>
-            {{/each}}
+
+
 
     </script>
     <script src="libs/jquery-1.12.0.js"></script>
@@ -36,29 +33,68 @@
             defaults : {
                 name : '',
                 isClosed : false
+            },
+            toggle : function(){
+                this.save({isClosed : !this.get('isClosed')})
             }
         });
         var BugsCollection = Backbone.Collection.extend({
             url : "http://localhost:3000/bugs",
-            model : Bug
+            model : Bug,
+            removeClosed : function(){
+                this.filter(function(bug){
+                    return bug.get('isClosed');
+                }).forEach(function(bug){
+                    bug.destroy();
+                });
+            }
         });
         var BugsCollectionView = Backbone.View.extend({
-            templateId : "#bugsListTemplate",
+
             initialize : function(){
-                this.listenTo(this.collection, "all", this.render.bind(this));
+                this.listenTo(this.collection, "add", this.addBug.bind(this));
             },
             events : {
-                "click #btnAdd" : "addNewBug"
+                "click #btnAdd" : "addNewBug",
+                "click #btnRemoveClosed" : "removeClosedBugs"
+            },
+            removeClosedBugs : function(){
+                this.collection.removeClosed();
             },
             addNewBug : function(){
                 var newBugName = this.$("#txtNewBug").val();
                 var newBug = {name : newBugName};
                 this.collection.create(newBug);
             },
+            addBug : function(bug){
+                console.log(arguments);
+                new BugView({model : bug})
+                    .render()
+                    .$el
+                    .appendTo(this.$("#olBugsList"));
+            }
+        });
+        var BugView = Backbone.View.extend({
+            templateId : "#bugTemplate",
+            initialize : function(){
+                this.listenTo(this.model, "change", this.render.bind(this));
+                this.listenTo(this.model, "destroy", this.remove.bind(this));
+            },
+            remove : function(){
+                this.$el.remove();
+            },
+            events : {
+              "click" : "toggleBug"
+            },
+            toggleBug : function(){
+                this.model.toggle();
+            },
+            tagName : "li",
             render : function(){
                 if (!this.templateFn)
                     this.templateFn = Handlebars.compile($(this.templateId).html());
-                this.$("#olBugsList").html(this.templateFn({list : this.collection.toJSON()}));
+                this.$el.html(this.templateFn(this.model.toJSON()));
+                return this;
             }
         });
 
@@ -68,7 +104,7 @@
                el : $("#bugsApp"),
                collection : bugsCollection
             });
-            bugsCollection.fetch();
+            //bugsCollection.fetch();
         });
     </script>
 </head>
