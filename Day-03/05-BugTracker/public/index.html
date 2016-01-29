@@ -13,6 +13,9 @@
         li{
             cursor: pointer;
         }
+        .stats{
+            font-size: 20pt;
+        }
     </style>
     <script type="text/x-template" id="bugTemplate">
                     {{#if isClosed}}
@@ -111,6 +114,11 @@
 <body>
     <h1>Bug Tracker</h1>
     <hr>
+    <div class="stats">
+        <span class="closed">2</span>
+        /
+        <span>5</span>
+    </div>
     <div id="bugsApp">
         <label for="">Bug :</label>
         <input type="text" name="" id="txtNewBug">
